@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	clipper "github.com/ctessum/go.clipper"
 	"math"
 )
@@ -169,7 +170,10 @@ type MicroPoint interface {
 	Size() Micrometer
 	SizeMM() Millimeter
 
+	Equals(b MicroPoint) bool
+	NotEqual(b MicroPoint) bool
 	Copy() MicroPoint
+	String() string
 }
 
 type microPoint struct {
@@ -259,8 +263,20 @@ func (p *microPoint) GeomPoint() *clipper.IntPoint {
 	}
 }
 
+func (a *microPoint) Equals(b MicroPoint) bool {
+	return a.x == b.X() && a.y == b.Y()
+}
+
+func (a *microPoint) NotEqual(b MicroPoint) bool {
+	return a.x != b.X() || a.y != b.Y()
+}
+
 func (p *microPoint) Copy() MicroPoint {
 	return &microPoint{
 		p.x, p.y,
 	}
+}
+
+func (p *microPoint) String() string {
+	return fmt.Sprintf("{%v, %v}", p.X, p.Y)
 }
